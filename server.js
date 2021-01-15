@@ -2,13 +2,16 @@ const path = require('path')
 const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
+const AppError =  require('./utils/appError')
+const errorHandler = require('./middleware/errors')
+const fileupload = require('express-fileupload')
+
 const userRouter = require('./routes/users')
 const categoryRouter = require('./routes/categories')
 const brandRouter = require('./routes/brands')
 const productRouter = require('./routes/products')
-const AppError =  require('./utils/appError')
-const errorHandler = require('./middleware/errors')
-const fileupload = require('express-fileupload')
+const orderRouter = require('./routes/orders')
+
 
 // Dotenv Config
 dotenv.config({path: './config/config.env'})
@@ -36,6 +39,7 @@ app.use('/api/v1/users', userRouter)
 app.use('/api/v1/categories', categoryRouter)
 app.use('/api/v1/brands', brandRouter)
 app.use('/api/v1/products', productRouter)
+app.use('/api/v1/orders', orderRouter)
 
 // Not Found Route
 app.all('*', (req, res, next) => {

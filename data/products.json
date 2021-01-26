@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Court Royale",
+    "brandId": "6010581f4485971841aacf99",
+    "categoryId": "601058244485971841aacf9e",
+    "gender": "male",
+    "priceCents": 1000000,
+    "season": 2021,
+    "sku": "00593353-0788-4172-bfa3-ce163f2e77a9",
+    "variants": [
+      {
+        "size": "40",
+        "color": "black",
+        "stock": 10
+      },
+      {
+        "size": "41",
+        "color": "white",
+        "stock": 2
+      },
+      {
+        "size": "40",
+        "color": "white",
+        "stock": 3
+      }
+    ]
+  },
+  {
+    "name": "MD Runner 2",
+    "brandId": "6010581f4485971841aacf99",
+    "categoryId": "601058244485971841aacf9e",
+    "gender": "male",
+    "priceCents": 1200000,
+    "season": 2020,
+    "sku": "5f29aa51-41d4-482e-a7f0-5132d35e2ba0",
+    "variants": [
+      {
+        "size": "43",
+        "color": "black",
+        "stock": 3
+      },
+      {
+        "size": "42",
+        "color": "green",
+        "stock": 8
+      },
+      {
+        "size": "44",
+        "color": "white",
+        "stock": 8
+      }
+    ]
+  },
+  {
+    "name": "Revolution 5",
+    "brandId": "6010581f4485971841aacf99",
+    "categoryId": "601058244485971841aacf9e",
+    "gender": "male",
+    "priceCents": 1300000,
+    "season": 2020,
+    "sku": "03f1dc9c-35f0-4c68-89e6-bb5397d0a06e",
+    "variants": [
+      {
+        "size": "40",
+        "color": "black",
+        "stock": 10
+      },
+      {
+        "size": "38",
+        "color": "red",
+        "stock": 8
+      },
+      {
+        "size": "42",
+        "color": "yellow",
+        "stock": 2
+      }
+    ]
+  },
+  {
+    "name": "Air Max Excee",
+    "brandId": "6010581f4485971841aacf99",
+    "categoryId": "601058244485971841aacf9e",
+    "gender": "female",
+    "priceCents": 900000,
+    "season": 2020,
+    "sku": "be4a5683-7f92-4246-be44-d3abf508028f",
+    "variants": [
+      {
+        "size": "43",
+        "color": "black",
+        "stock": 3
+      },
+      {
+        "size": "42",
+        "color": "green",
+        "stock": 8
+      },
+      {
+        "size": "44",
+        "color": "white",
+        "stock": 8
+      }
+    ]
+  },
+  {
+    "name": "Zoom Winflo 6",
+    "brandId": "6010581f4485971841aacf99",
+    "categoryId": "601058244485971841aacf9e",
+    "gender": "female",
+    "priceCents": 750000,
+    "season": 2021,
+    "sku": "59313e22-368b-4792-9fa9-600bfef01546",
+    "variants": [
+      {
+        "size": "43",
+        "color": "black",
+        "stock": 3
+      },
+      {
+        "size": "42",
+        "color": "green",
+        "stock": 8
+      },
+      {
+        "size": "44",
+        "color": "white",
+        "stock": 8
+      }
+    ]
+  }
+]

@@ -8,8 +8,42 @@ const AppError = require('../utils/appError')
 exports.createOrder = asyncHandler(async (req, res, next) => {
   req.body.user = req.user
   req.body.userId = req.user._id
+  req.body.status = 'cart'
+
   const order = await Order.create(req.body)
 
+  res
+    .status(201)
+    .json({
+      status: 'success',
+      data: order
+    })
+})
+
+// @desc      Update order
+// @route     PUT /api/v1/orders
+// @access    Private
+exports.updateOrder = asyncHandler(async (req, res, next) => {
+  const order = await Order.findById(req.params.id)
+  order.status = 'confirmed'
+  order.save()
+
+  res
+    .status(201)
+    .json({
+      status: 'success',
+      data: order
+    })
+})
+
+// @desc      Cancel order
+// @route     DELETE /api/v1/orders
+// @access    Private
+exports.cancelOrder = asyncHandler(async (req, res, next) => {
+  const order = await Order.findById(req.params.id)
+  order.status = 'cancelled'
+  order.save()
+  
   res
     .status(201)
     .json({

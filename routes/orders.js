@@ -10,7 +10,6 @@ router
 
 router
   .route('/:id')
-  .patch(orderController.updateOrder)
   .delete(orderController.cancelOrder)
 
 module.exports = router

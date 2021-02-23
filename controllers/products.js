@@ -4,6 +4,12 @@ const asyncHandler = require('express-async-handler')
 const Product = require('../models/Product')
 const AppError = require('../utils/appError')
 const s3 = require('../utils/s3')
+const elasticsearch = require('elasticsearch')
+
+// Elastic Search connect
+const elasticClient = new elasticsearch.Client({
+  host: 'localhost:9200'
+});
 
 // @desc      Get all products
 // @route     GET /api/v1/products
@@ -17,6 +23,14 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.createProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.create(req.body)
+
+  // Guardar ID de mongo abajo
+  // levehnstein distance
+
+  elasticClient.index({
+    index: 'products',
+    body: req.body
+  })
 
   res
     .status(201)

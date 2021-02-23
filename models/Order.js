@@ -31,21 +31,24 @@ const OrderSchema = mongoose.Schema(
     totalPriceCents: Number,
     status: {
       type: String,
-      enum: ['cart', 'confirmed', 'cancelled'],
-      default: 'cart'
-    }
+      enum: ['confirmed', 'cancelled'],
+      default: 'confirmed'
+    },
+  },
+  {
+    timestamps: true
   }
 )
 
 OrderSchema.pre('save', async function(next) {
-  if (this.status === 'confirmed') {
+  if (this.isNew) {
     // Get products ids from JSON
     const orderProductsIds = this.items.map(item => item.product)
 
     // Find into DB all products with the ids
     const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
 
-    this.totalPriceCents = 0
+    const totalPriceCents = 0
 
     // Iterate over order items
     this.items.forEach(async item => {
@@ -69,19 +72,39 @@ OrderSchema.pre('save', async function(next) {
           return next(new AppError(`No stock available`, 422))
         }
       
-        // Complete product info
-        item.image = product.image
-        item.name = product.name
-        item.priceCents = product.priceCents * item.quantity
-        this.totalPriceCents += item.priceCents
-      
-        // Substract stock to product
-        variant.stock -= item.quantity  
+        if (this.status === 'confirmed') {
+          // Complete product info
+          item.image = product.image
+          item.name = product.name
+          item.priceCents = product.priceCents * item.quantity
+          totalPriceCents += item.priceCents
+          
+          // Substract stock to product
+          variant.stock -= item.quantity  
+          
+        } else {
+          // Substract stock to product
+          variant.stock += item.quantity  
+        }
         await product.save()
     })
-  } else if (this.status === 'cancelled') {
-    // Sum stock to product
+  } else {
+    const orderProductsIds = this.items.map(item => item.product)
 
+    // Find into DB all products with the ids
+    const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
+
+    // Iterate over order items
+    this.items.forEach(async item => {
+      // Find into products array the product with id
+      const product = dbProducts.find(p => p._id.toString() === item.product.toString())
+
+      // Filter inside variants with color and size
+      const variant = product.variants.find(v => v.color === item.color && v.size === item.size)
+
+      
+      await product.save()
+    })
   }
   next()
 })

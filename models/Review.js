@@ -35,7 +35,7 @@ ReviewSchema.index({ product: 1, user: 1 }, { unique: true })
 ReviewSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'user',
-    select: 'name photo'
+    select: 'name'
   })
   next()
 })

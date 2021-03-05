@@ -1,7 +1,14 @@
 const express = require('express')
 const { restrictTo, protect } = require('../middleware/auth')
 const Product = require('../models/Product')
+
+// Include other resource routers
+const reviewRouter = require('./reviews')
+
 const router = express.Router()
+
+// Re route to review router
+router.use('/:productId/reviews', reviewRouter)
 
 const productController = require('../controllers/products')
 const advancedResults = require('../middleware/advancedResults')

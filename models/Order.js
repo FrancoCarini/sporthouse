@@ -41,71 +41,70 @@ const OrderSchema = mongoose.Schema(
 )
 
 OrderSchema.pre('save', async function(next) {
-  if (this.isNew) {
-    // Get products ids from JSON
-    const orderProductsIds = this.items.map(item => item.product)
+  // Get products ids from JSON
+  const orderProductsIds = this.items.map(item => item.product)
 
-    // Find into DB all products with the ids
-    const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
+  // Find into DB all products with the ids
+  const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
 
-    const totalPriceCents = 0
+  let totalPriceCents = 0
+  let confirm = true
+  const lastMessage = {}
 
-    // Iterate over order items
-    this.items.forEach(async item => {
-        // Find into products array the product with id
-        const product = dbProducts.find(p => p._id.toString() === item.product.toString())
+  // Iterate over order items
+  this.items.forEach(async item => {
+    // Find into products array the product with id
+    let product = dbProducts.find(p => p._id.toString() === item.product.toString())
 
-        if (!product) {
-          return next(new AppError(`No product with id ${item.product}`, 422))
-        }
+    if (!product) {
+      lastMessage.message = `No product with id ${item.product}`
+      lastMessage.code = 422
+      confirm = false
+      return
+    }
 
-        // Filter inside variants with color and size
-        const variant = product.variants.find(v => v.color === item.color && v.size === item.size)
+    // Filter inside variants with color and size
+    let variant = product.variants.find(v => v.color === item.color && v.size === item.size)
 
-        // Check if variant exists
-        if (!variant) {
-          return next(new AppError(`No product with color ${item.color} and size ${item.size}`, 422))
-        }
+    // Check if variant exists
+    if (!variant) {
+      lastMessage.message = `No product with color ${item.color} and size ${item.size}`
+      lastMessage.code = 422
+      confirm = false
+      return
+    }
 
-        // Check variant stock
-        if (item.quantity > variant.stock) {
-          return next(new AppError(`No stock available`, 422))
-        }
-      
-        if (this.status === 'confirmed') {
-          // Complete product info
-          item.image = product.image
-          item.name = product.name
-          item.priceCents = product.priceCents * item.quantity
-          totalPriceCents += item.priceCents
-          
-          // Substract stock to product
-          variant.stock -= item.quantity  
-          
-        } else {
-          // Substract stock to product
-          variant.stock += item.quantity  
-        }
-        await product.save()
-    })
-  } else {
-    const orderProductsIds = this.items.map(item => item.product)
+    // Check variant stock
+    if (item.quantity > variant.stock) {
+      lastMessage.message = `No stock available`
+      lastMessage.code = 422
+      confirm = false
+      return
+    }
+  })
 
-    // Find into DB all products with the ids
-    const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
-
-    // Iterate over order items
-    this.items.forEach(async item => {
-      // Find into products array the product with id
-      const product = dbProducts.find(p => p._id.toString() === item.product.toString())
-
-      // Filter inside variants with color and size
-      const variant = product.variants.find(v => v.color === item.color && v.size === item.size)
-
-      
-      await product.save()
-    })
+  if (!confirm) {
+    return next(new AppError(lastMessage.message, lastMessage.code))
   }
+
+  this.items.forEach(async item => {
+    // Find into products array the product with id
+    const product = dbProducts.find(p => p._id.toString() === item.product.toString())
+
+    // Complete product info
+    item.image = product.image
+    item.name = product.name
+    item.priceCents = product.priceCents * item.quantity
+    totalPriceCents += item.priceCents
+      
+    // Filter inside variants with color and size
+    const variant = product.variants.find(v => v.color === item.color && v.size === item.size)
+
+    // Substract stock to product
+    variant.stock -= item.quantity  
+
+    await product.save()
+  })
   next()
 })
 

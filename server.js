@@ -11,7 +11,7 @@ const categoryRouter = require('./routes/categories')
 const brandRouter = require('./routes/brands')
 const productRouter = require('./routes/products')
 const orderRouter = require('./routes/orders')
-
+const reviewRouter = require('./routes/reviews')
 
 // Dotenv Config
 dotenv.config({path: './config/config.env'})
@@ -40,6 +40,7 @@ app.use('/api/v1/categories', categoryRouter)
 app.use('/api/v1/brands', brandRouter)
 app.use('/api/v1/products', productRouter)
 app.use('/api/v1/orders', orderRouter)
+app.use('/api/v1/reviews', reviewRouter)
 
 // Not Found Route
 app.all('*', (req, res, next) => {

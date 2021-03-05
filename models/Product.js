@@ -56,6 +56,16 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Sku is required']
   },
+  ratingsAverage: {
+    type: Number,
+    min: [1, 'Rating must be higher than 1'],
+    max: [5, 'Rating must be lower than 5'],
+    set: val => Math.round(val * 10) / 10
+  },
+  ratingsQuantity: {
+    type: Number,
+    default: 0
+  },
   variants: {
     type: [{
       size: {

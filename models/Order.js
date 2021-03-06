@@ -1,5 +1,7 @@
+
 const mongoose = require('mongoose')
 const AppError = require('../utils/appError')
+const Product = require('./Product')
 
 const OrderSchema = mongoose.Schema(
   {
@@ -87,8 +89,7 @@ OrderSchema.pre('save', async function(next) {
     return next(new AppError(lastMessage.message, lastMessage.code))
   }
 
-  this.items.forEach(async item => {
-    // Find into products array the product with id
+  for (const item of this.items) {
     const product = dbProducts.find(p => p._id.toString() === item.product.toString())
 
     // Complete product info
@@ -104,8 +105,29 @@ OrderSchema.pre('save', async function(next) {
     variant.stock -= item.quantity  
 
     await product.save()
-  })
+  }
   next()
+})
+
+OrderSchema.pre('findOneAndUpdate', async function(next) {
+  const orderToUpdate = await this.model.findOne(this.getQuery());
+
+  const orderProductsIds = orderToUpdate.items.map(item => item.product)
+
+  // Find into DB all products with the ids
+  const dbProducts = await Product.find({_id: { $in: orderProductsIds }})
+
+  for (const item of orderToUpdate.items) {
+    const product = dbProducts.find(p => p._id.toString() === item.product.toString())
+
+    // Filter inside variants with color and size
+    const variant = product.variants.find(v => v.color === item.color && v.size === item.size)
+
+    // Substract stock to product
+    variant.stock += item.quantity  
+
+    await product.save()
+  }
 })
 
 module.exports = mongoose.model('Order', OrderSchema)

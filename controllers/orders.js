@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler')
 const Order = require('../models/Order')
-const AppError = require('../utils/appError')
 
 // @desc      Create order
 // @route     POST /api/v1/orders
@@ -24,15 +23,12 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 // @route     DELETE /api/v1/orders
 // @access    Private
 exports.cancelOrder = asyncHandler(async (req, res, next) => {
-  const order = await Order.findById(req.params.id)
+  const order = await Order.findByIdAndUpdate(req.params.id, {status: 'cancelled'}, {
+    new: true
+  })
 
-  order.status = 'cancelled'
-  order.save()
-  
-  res
-    .status(200)
-    .json({
-      status: 'success',
-      data: order
-    })
+  res.status(200).json({
+    status: 'success',
+    data: order
+  })
 })

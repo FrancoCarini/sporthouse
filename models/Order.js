@@ -36,6 +36,11 @@ const OrderSchema = mongoose.Schema(
       enum: ['confirmed', 'cancelled'],
       default: 'confirmed'
     },
+    storeId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Store',
+      required: [true, 'Please provide the store']
+    }
   },
   {
     timestamps: true
@@ -49,7 +54,6 @@ OrderSchema.pre('save', async function(next) {
   // Find into DB all products with the ids
   const dbProducts = await this.model('Product').find({_id: { $in: orderProductsIds }})
 
-  let totalPriceCents = 0
   let confirm = true
   const lastMessage = {}
 
@@ -89,6 +93,7 @@ OrderSchema.pre('save', async function(next) {
     return next(new AppError(lastMessage.message, lastMessage.code))
   }
 
+  let totalPriceCents = 0
   for (const item of this.items) {
     const product = dbProducts.find(p => p._id.toString() === item.product.toString())
 
@@ -112,6 +117,16 @@ OrderSchema.pre('save', async function(next) {
 OrderSchema.pre('findOneAndUpdate', async function(next) {
   const orderToUpdate = await this.model.findOne(this.getQuery());
 
+  // Check if the order is already in cancelled status
+  if (!orderToUpdate) {
+    return next(new AppError(`No order with id ${this.getFilter()._id}`, 422))
+  }
+
+  // Check if the order is already in cancelled status
+  if (orderToUpdate.status === 'cancelled') {
+    return next(new AppError(`Order ${orderToUpdate._id} is already cancelled`, 422))
+  }
+
   const orderProductsIds = orderToUpdate.items.map(item => item.product)
 
   // Find into DB all products with the ids
@@ -128,6 +143,7 @@ OrderSchema.pre('findOneAndUpdate', async function(next) {
 
     await product.save()
   }
+  next()
 })
 
 module.exports = mongoose.model('Order', OrderSchema)

@@ -10,4 +10,9 @@ router
   .get(brandController.getAllBrands)
   .post(protect, restrictTo('admin'), brandController.createBrand)
 
-module.exports = router
+router
+  .route('/:id')
+  .get(brandController.getBrand)
+  .put(protect, restrictTo('admin'), brandController.updateBrand)
+
+  module.exports = router

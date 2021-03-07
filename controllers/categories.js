@@ -26,3 +26,28 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
       data: category
     })
 })
+
+exports.updateCategory = asyncHandler(async (req, res, next) => {
+  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  })
+
+  res.status(200).json({
+    success: true,
+    data: category
+  })
+})
+
+exports.getCategory = asyncHandler(async (req, res, next) => {
+  const category = await Category.findById(req.params.id)
+  
+  if(!category) {
+    return next(new ErrorResponse(`Category Not Found with id of ${req.params.id}`, 404))
+  }
+
+  res.status(200).json({
+    success: true,
+    data: category
+  })
+})

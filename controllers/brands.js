@@ -26,3 +26,28 @@ exports.createBrand = asyncHandler(async (req, res, next) => {
       data: brand
     })
 })
+
+exports.updateBrand = asyncHandler(async (req, res, next) => {
+  const brand = await Brand.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  })
+
+  res.status(200).json({
+    success: true,
+    data: brand
+  })
+})
+
+exports.getBrand = asyncHandler(async (req, res, next) => {
+  const brand = await Brand.findById(req.params.id)
+  
+  if(!brand) {
+    return next(new ErrorResponse(`Brand Not Found with id of ${req.params.id}`, 404))
+  }
+
+  res.status(200).json({
+    success: true,
+    data: brand
+  })
+})

@@ -10,4 +10,9 @@ router
   .get(categoryController.getAllCategories)
   .post(protect, restrictTo('admin'), categoryController.createCategory)
 
+router
+  .route('/:id')
+  .get(categoryController.getCategory)
+  .put(protect, restrictTo('admin'), categoryController.updateCategory)
+
 module.exports = router

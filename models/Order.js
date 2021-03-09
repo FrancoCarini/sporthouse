@@ -16,20 +16,28 @@ const OrderSchema = mongoose.Schema(
       },
       name: String
     },
-    items: [
-      {
-        name: { type: String},
-        quantity: { type: Number, required: true },
-        color: { type: String, required: true },
-        size: { type: String, required: true },
-        image: { type: String},
-        priceCents: { type: Number},
-        product: {
-          type: mongoose.Schema.ObjectId,
-          ref: 'Product'
+    items: {
+      type: [
+        {
+          name: { type: String},
+          quantity: { type: Number, required: true },
+          color: { type: String, required: true },
+          size: { type: String, required: true },
+          image: { type: String},
+          priceCents: { type: Number},
+          product: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Product'
+          },
         },
-      },
-    ],
+      ],
+      validate: {
+        validator: function(v) {
+          return Array.isArray(v) && v.length > 0
+        },
+        message: 'Please provide items array'
+      }
+    },
     totalPriceCents: Number,
     status: {
       type: String,

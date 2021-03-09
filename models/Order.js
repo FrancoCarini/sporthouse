@@ -119,6 +119,8 @@ OrderSchema.pre('save', async function(next) {
 
     await product.save()
   }
+  
+  this.totalPriceCents = totalPriceCents
   next()
 })
 

@@ -2,9 +2,11 @@ const path = require('path')
 const express = require('express')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
+const connectDB = require('./utils/db')
 const AppError =  require('./utils/appError')
 const errorHandler = require('./middleware/errors')
 const fileupload = require('express-fileupload')
+
 
 const userRouter = require('./routes/users')
 const categoryRouter = require('./routes/categories')
@@ -24,13 +26,7 @@ const app = express()
 app.use(express.json({limit: '10kb'}))
 
 // DB Connect
-mongoose.connect(process.env.DATABASE, { 
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true
-})
-.then(() => console.log('Connected to DB'))
+connectDB()
 
 //File Upload
 app.use(fileupload())

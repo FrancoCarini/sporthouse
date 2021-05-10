@@ -1,9 +1,15 @@
 const mongoose = require('mongoose')
+const slugify = require('slugify')
 
 const ProductSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'Name is required']
+  },
+  slug: String,
+  description: {
+    type: String,
+    required: [true, 'Description is required']
   },
   brandId: {
     type: mongoose.Schema.ObjectId,
@@ -91,6 +97,12 @@ const ProductSchema = new mongoose.Schema({
 })
 
 ProductSchema.index({name: 1})
+
+//Create Store slug from the name
+ProductSchema.pre('save', function(next) {
+  this.slug = slugify(this.name, {lower: true})
+  next()
+})
 
 ProductSchema.pre('save', async function(next) {
   if (this.isModified('categoryId')) {

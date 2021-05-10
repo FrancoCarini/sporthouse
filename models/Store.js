@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
-const NodeGeocoder = require('node-geocoder')
+const geocoder = require('../utils/geocoder')
+
 
 const StoreSchema = new mongoose.Schema({
   name: {
@@ -11,11 +12,6 @@ const StoreSchema = new mongoose.Schema({
     maxlength: [50, 'Name can not be more than 50 characters']
   },
   slug: String,
-  description: {
-    type: String,
-    required: [true, 'Please add a description'],
-    maxlength: [500, 'Description can not be more than 500 characters']
-  },
   phone: {
     type: String,
     maxlength: [20, 'Phone number can not be longer than 20 characters']
@@ -30,6 +26,10 @@ const StoreSchema = new mongoose.Schema({
   address: {
     type: String,
     required: [true, 'Please add an address']
+  },
+  city: {
+    type: String,
+    required: [true, 'Please add a city']
   },
   location: {
     // GeoJSON Point
@@ -58,13 +58,7 @@ StoreSchema.pre('save', function(next) {
 
 //Geocode & create location field
 StoreSchema.pre('save', async function(next) {
-  const geocoder = NodeGeocoder({
-    provider: process.env.GEOCODER_PROVIDER,
-    httpAdapter: 'https',
-    apiKey: process.env.GEOCODER_API_KEY,
-    formatter: null
-  })
-  const loc = await geocoder.geocode(this.address)
+  const loc = await geocoder.geocode(`${this.address}, ${this.city}`)
 
   this.location = {
     type: 'Point',
@@ -80,8 +74,6 @@ StoreSchema.pre('save', async function(next) {
     country: loc[0].countryCode
   }
 
-  //Do not save address in db
-  this.address = undefined
   next()
 })
 

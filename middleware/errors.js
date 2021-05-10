@@ -2,7 +2,7 @@ const AppError = require('../utils/appError')
 
 const errorHandler = (err, req, res, next) => {
   let error = {}
-  error.statusCode = err.code
+  error.statusCode = err.statusCode
   error.message = err.message
 
   // Mongoose Bad Object ID

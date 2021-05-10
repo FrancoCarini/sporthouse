@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Belgrano Club Store",
+    "phone": "4555555",
+    "email": "belgrano@sporthouse.com",
+    "address": "Av Cabildo 2238",
+    "city": "Ciudad autonoma de Buenos Aires"
+  },
+  {
+    "name": "Palermo Green Store",
+    "phone": "4777777",
+    "email": "palermo@sporthouse.com",
+    "address": "Av Santa Fe 3209",
+    "city": "Ciudad autonoma de Buenos Aires"
+  },
+  {
+    "name": "Recoleta Mall Store",
+    "phone": "48888888",
+    "email": "palermo@sporthouse.com",
+    "address": "Av Las Heras 1860",
+    "city": "Ciudad autonoma de Buenos Aires"
+  }
+]

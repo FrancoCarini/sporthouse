@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "6046f80b06554d8e326d2fe5",
+    "role": "admin",
+    "email": "carini.franco@gmail.com",
+    "name": "Admin",
+    "password": "$2a$12$QwwJw58/x.Kbe8CdXpK.4OXHiY5ym7Q6mP5j7s/oK3JNSqpl3d/Sq"  
+  },
+  {
+    "_id": "6046f957ac32961b68ed11f6",
+    "role": "user",
+    "email": "f_carini@hotmail.com",
+    "name": "Franco Carini",
+    "password": "$2a$12$QwwJw58/x.Kbe8CdXpK.4OXHiY5ym7Q6mP5j7s/oK3JNSqpl3d/Sq"  
+  }
+]

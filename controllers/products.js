@@ -89,3 +89,14 @@ exports.productPhotoUpload = asyncHandler(async (req, res, next) => {
     })
   })
 })
+
+exports.getProductBySlug = asyncHandler(async (req, res, next) => {
+  const product = await Product.findOne({ slug: req.params.slug })
+  
+  res
+    .status(200)
+    .json({
+      success: true,
+      product
+    })  
+})

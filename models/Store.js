@@ -47,7 +47,8 @@ const StoreSchema = new mongoose.Schema({
     state: String,
     zipcode: String,
     country: String
-  }
+  },
+  image: String
 })
 
 //Create Store slug from the name

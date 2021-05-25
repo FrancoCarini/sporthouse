@@ -10,6 +10,7 @@ router
 
 router
   .route('/:id')
-  .delete(orderController.cancelOrder)
+  .get(protect, orderController.getOrder)
+  .delete(protect, orderController.cancelOrder)
 
 module.exports = router

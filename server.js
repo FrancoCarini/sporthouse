@@ -6,6 +6,7 @@ const connectDB = require('./utils/db')
 const AppError =  require('./utils/appError')
 const errorHandler = require('./middleware/errors')
 const fileupload = require('express-fileupload')
+const cors = require('cors')
 
 
 const userRouter = require('./routes/users')
@@ -27,6 +28,9 @@ app.use(express.json({limit: '10kb'}))
 
 // DB Connect
 connectDB()
+
+// Cors
+app.use(cors())
 
 //File Upload
 app.use(fileupload())

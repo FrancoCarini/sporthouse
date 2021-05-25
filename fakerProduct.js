@@ -16,7 +16,7 @@ const shoes = []
 const brands = JSON.parse(fs.readFileSync(`${__dirname}/data/brands.json`), 'utf-8')
 
 const brandIds = brands.map(brand => brand._id)
-const prices = [1000000, 1100000, 1200000, 1300000, 1400000, 1500000, 1600000, 1700000, 1800000, 1900000, 2000000]
+const prices = [10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000]
 const seasons = [2019, 2020, 2021]
 const gender = ['male', 'female']
 

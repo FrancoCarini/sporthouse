@@ -4,20 +4,23 @@
     "phone": "4555555",
     "email": "belgrano@sporthouse.com",
     "address": "Av Cabildo 2238",
-    "city": "Ciudad autonoma de Buenos Aires"
+    "city": "Ciudad autonoma de Buenos Aires",
+    "image": "https://res.cloudinary.com/dwxfuglag/image/upload/sporthouse/stores/belgrano_gu1be4.jpg"
   },
   {
     "name": "Palermo Green Store",
     "phone": "4777777",
     "email": "palermo@sporthouse.com",
     "address": "Av Santa Fe 3209",
-    "city": "Ciudad autonoma de Buenos Aires"
+    "city": "Ciudad autonoma de Buenos Aires",
+    "image": "https://res.cloudinary.com/dwxfuglag/image/upload/sporthouse/stores/recoleta_t4ocdc.jpg"
   },
   {
     "name": "Recoleta Mall Store",
     "phone": "48888888",
     "email": "palermo@sporthouse.com",
     "address": "Av Las Heras 1860",
-    "city": "Ciudad autonoma de Buenos Aires"
+    "city": "Ciudad autonoma de Buenos Aires",
+    "image": "https://res.cloudinary.com/dwxfuglag/image/upload/sporthouse/stores/palermo_z4osvh.jpg"
   }
 ]

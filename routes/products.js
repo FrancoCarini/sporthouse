@@ -18,6 +18,9 @@ router
   .get(advancedResults(Product), productController.getAllProducts)
   .post(protect, restrictTo('admin'), productController.createProduct)
 
+router
+  .route('/slug/:slug').get(productController.getProductBySlug)
+
 router.route('/:id/photo').put(protect, restrictTo('admin'), productController.productPhotoUpload)
 
 module.exports = router

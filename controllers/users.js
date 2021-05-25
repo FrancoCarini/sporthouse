@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 const AppError = require('../utils/appError')
 const Email = require('../utils/email')
+const Order = require('../models/Order')
 
 // Generate token
 const signToken = id => {
@@ -29,7 +30,7 @@ const createSendToken = (user, statusCode, res) => {
   res.cookie('jwt', token, cookieOptions)
 
   res.status(statusCode).json({
-    status: 'success',
+    success: true,
     token,
     data: {
       user
@@ -161,4 +162,15 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
 
   // Log user in
   createSendToken(user, 200, res)
+})
+
+exports.me = asyncHandler(async (req, res, next) => {
+  // Get client orders
+  const orders = await Order.find({ userId: req.user._id })
+
+  res.status(200).json({
+    success: true,
+    user: req.user,
+    orders
+  })    
 })

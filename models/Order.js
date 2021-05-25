@@ -108,6 +108,7 @@ OrderSchema.pre('save', async function(next) {
     // Complete product info
     item.image = product.image
     item.name = product.name
+    item.slug = product.slug
     item.priceCents = product.priceCents * item.quantity
     totalPriceCents += item.priceCents
       

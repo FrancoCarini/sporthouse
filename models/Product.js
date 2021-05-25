@@ -56,7 +56,7 @@ const ProductSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    default: 'no-image.jpg'
+    default: 'https://res.cloudinary.com/dwxfuglag/image/upload/sporthouse/products/sample-image.jpg'
   },
   sku: {
     type: String,
@@ -96,7 +96,7 @@ const ProductSchema = new mongoose.Schema({
   }
 })
 
-ProductSchema.index({name: 1})
+ProductSchema.index({name: 1}, {slug: 1})
 
 //Create Store slug from the name
 ProductSchema.pre('save', function(next) {

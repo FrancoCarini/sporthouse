@@ -11,6 +11,7 @@ router.patch('/resetPassword/:token', userController.resetPassword)
 router.use(protect)
 
 router.patch('/updatePassword', userController.updatePassword)
+router.get('/me', userController.me)
 
 router.use(restrictTo('admin'))
 

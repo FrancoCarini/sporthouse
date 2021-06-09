@@ -37,7 +37,7 @@ exports.cancelOrder = asyncHandler(async (req, res, next) => {
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const order = await Order.findById(req.params.id).populate({
     path: 'storeId',
-    select: 'address city'
+    select: 'address city location.coordinates'
   })
 
   if (!order) {

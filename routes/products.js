@@ -21,6 +21,9 @@ router
 router
   .route('/slug/:slug').get(productController.getProductBySlug)
 
+router
+  .route('/search/:search').get(productController.search)
+
 router.route('/:id/photo').put(protect, restrictTo('admin'), productController.productPhotoUpload)
 
 module.exports = router

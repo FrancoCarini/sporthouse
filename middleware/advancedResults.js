@@ -10,9 +10,16 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   //Loop over removeFields and delete them from reqQuery
   removeFields.forEach(param => delete reqQuery[param])
 
+  // Iterate throgh query object and check if exists some in operator and replace string content with an array
+  Object.keys(reqQuery).forEach(queryPart => { 
+    if (typeof reqQuery[queryPart]['in'] !== 'undefined') {
+      reqQuery[queryPart]['in'] = reqQuery[queryPart]['in'].split(',')
+    }
+  })
+
   //Create query string
   let queryStr = JSON.stringify(reqQuery)
-
+  
   //create Operators ($gt, $gte, etc)
   queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`)
 

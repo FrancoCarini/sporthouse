@@ -14,11 +14,14 @@ const usedNames = []
 const shoes = []
 
 const brands = JSON.parse(fs.readFileSync(`${__dirname}/data/brands.json`), 'utf-8')
+const categories = JSON.parse(fs.readFileSync(`${__dirname}/data/categories.json`), 'utf-8')
 
 const brandIds = brands.map(brand => brand._id)
+const shoesCategory = categories.filter(cat => cat.name === 'Shoes')[0]
 const prices = [10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000, 19000, 20000]
 const seasons = [2019, 2020, 2021]
 const gender = ['male', 'female']
+
 
 // Mens Nike Shoes
 for (let i = 0; i < 50; i++) {
@@ -166,7 +169,8 @@ for (let i = 0; i < 50; i++) {
     "name": productName,
     "description": faker.lorem.sentences(),
     "brandId": brandIds[Math.floor(Math.random() * brandIds.length)],
-    "categoryId": "601058244485971841aacf9e",
+    "categoryId": shoesCategory._id,
+    "category": shoesCategory,
     "gender": gender[Math.floor(Math.random() * gender.length)],
     "priceCents": prices[Math.floor(Math.random() * prices.length)],
     "season": seasons[Math.floor(Math.random() * seasons.length)],

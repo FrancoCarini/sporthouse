@@ -1,0 +1,44 @@
+[
+  {
+    "filterCategory": "category",
+    "checks": [
+      {
+        "label": "Shoes",
+        "value": "Shoes"
+      },
+      {
+        "label": "T-shirts",
+        "value": "T-shirts"
+      },
+      {
+        "label": "Pants",
+        "value": "Pants"
+      },
+      {
+        "label": "Shorts",
+        "value": "Shorts"
+      }
+    ]
+  },
+  {
+    "filterCategory": "size",
+    "checks": [
+      {
+        "label": "38",
+        "value": "38"
+      },
+      {
+        "label": "39",
+        "value": "39"
+      },
+      {
+        "label": "40",
+        "value": "40"
+      },
+      {
+        "label": "41",
+        "value": "41"
+      }
+    ]
+  }
+]

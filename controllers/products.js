@@ -3,7 +3,7 @@ const path = require('path')
 const asyncHandler = require('express-async-handler')
 const Product = require('../models/Product')
 const AppError = require('../utils/appError')
-const s3 = require('../utils/s3')
+const { uploadFile } = require('../utils/cloudinary')
 
 // @desc      Get all products
 // @route     GET /api/v1/products
@@ -63,21 +63,35 @@ exports.productPhotoUpload = asyncHandler(async (req, res, next) => {
     }
 
     // Upload to S3
-    s3.uploadFile(filePath)
-    
+    const imageRes = await uploadFile(filePath, process.env.CLOUDINARY_PRODUCTS_PATH)
+    if (imageRes.error) {
+      return next(new AppError(`Problem with file upload`, 500))
+    }
+
     // Remove file from localDir
     fs.unlinkSync(filePath)
 
-    await Product.findByIdAndUpdate(req.params.id, {image: file.name})
+    await Product.findByIdAndUpdate(req.params.id, {image: imageRes.secure_url})
     res.status(200).json({
       success: true,
-      data: file.name
+      image: imageRes.secure_url
     })
   })
 })
 
 exports.getProductBySlug = asyncHandler(async (req, res, next) => {
   const product = await Product.findOne({ slug: req.params.slug })
+  
+  res
+    .status(200)
+    .json({
+      success: true,
+      product
+    })  
+})
+
+exports.getProductById = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id)
   
   res
     .status(200)
@@ -101,3 +115,35 @@ exports.search = asyncHandler(async (req, res, next) => {
       products
     })  
 })
+
+exports.filters = asyncHandler(async (req, res, next) => {
+  const products = res.advancedResults.data
+
+  const filters = {
+    'Category': [],
+    'Gender': [],
+    'Brand': [],
+    'Size': []
+  }
+
+  products.forEach(product => {
+    filters.Category.push(product.category.name)
+    filters.Gender.push(product.gender)
+    filters.Brand.push(product.brand.name)
+    // Get sizes
+    filters.Size = [...filters.Size, ...product.variants.map(variant => variant.size)]
+  })
+
+  // Remover Duplicados
+  filters.Category = [...new Set(filters.Category)]
+  filters.Gender = [...new Set(filters.Gender)]
+  filters.Brand = [...new Set(filters.Brand)]
+  filters.Size = [...new Set(filters.Size)]
+
+  res
+    .status(200)
+    .json({
+      success: true,
+      filters
+    })  
+}) 

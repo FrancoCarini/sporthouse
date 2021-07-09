@@ -116,3 +116,45 @@ exports.deleteReview = asyncHandler(async (req, res, next) => {
     data: {}
   })
 })
+
+
+exports.pendingReviews = asyncHandler(async (req, res, next) => {
+  const products = await Order.aggregate([
+    {
+      $unwind: '$items'
+    },
+    {
+      $match: {
+        userId: req.user._id,
+        status: 'handed'
+      }
+    },
+    {
+      $group: {
+        _id:  "$items.product",
+        name: { $first : "$items.name" },
+        image: { $first : "$items.image" }
+      }
+    },
+    { 
+      $lookup: {
+        from: "reviews",
+        localField: "_id",
+        foreignField: "product",
+        as: "review"
+      }
+    },
+    {
+      $match: {
+        review: {$size: 0}
+      }
+    }
+  ])
+
+  res.status(200).json({
+    success: true,
+    data: {
+      products
+    }
+  })
+})

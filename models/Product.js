@@ -38,8 +38,8 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Gender is required'],
     enum: {
-      values: ['male', 'female'],
-      message: 'Gender must be: male, female'
+      values: ['male', 'female', 'unisex'],
+      message: 'Gender must be: male, female, unisex'
     },
     default: 'male'
   },

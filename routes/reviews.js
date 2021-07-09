@@ -17,9 +17,14 @@ router
   }), reviewController.getReviews)
   .post(protect, restrictTo('user'), reviewController.addReview)
 
-router.route('/:id')
-.get(reviewController.getReview)
-.put(protect, restrictTo('user'), reviewController.updateReview)
-.delete(protect, restrictTo('user'), reviewController.deleteReview)
+router
+  .route('/pending')
+  .get(protect, restrictTo('user'), reviewController.pendingReviews)
+
+router
+  .route('/:id')
+    .get(reviewController.getReview)
+    .put(protect, restrictTo('user'), reviewController.updateReview)
+    .delete(protect, restrictTo('user'), reviewController.deleteReview)
 
 module.exports = router

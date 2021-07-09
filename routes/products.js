@@ -15,14 +15,20 @@ const advancedResults = require('../middleware/advancedResults')
 
 router
   .route('/')
-  .get(advancedResults(Product), productController.getAllProducts)
+  .get(advancedResults(Product, null, true), productController.getAllProducts)
   .post(protect, restrictTo('admin'), productController.createProduct)
+
+router
+  .route('/:id([0-9]{1}[0-9A-Za-z]+)').get((protect, restrictTo('admin'), productController.getProductById))
 
 router
   .route('/slug/:slug').get(productController.getProductBySlug)
 
 router
   .route('/search/:search').get(productController.search)
+
+router
+  .route('/filters').get(advancedResults(Product, null, false), productController.filters)
 
 router.route('/:id/photo').put(protect, restrictTo('admin'), productController.productPhotoUpload)
 

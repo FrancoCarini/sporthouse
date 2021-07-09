@@ -41,7 +41,7 @@ const OrderSchema = mongoose.Schema(
     totalPriceCents: Number,
     status: {
       type: String,
-      enum: ['confirmed', 'cancelled'],
+      enum: ['confirmed', 'cancelled', 'handed'],
       default: 'confirmed'
     },
     storeId: {
@@ -128,7 +128,6 @@ OrderSchema.pre('save', async function(next) {
 OrderSchema.pre('findOneAndUpdate', async function(next) {
   const orderToUpdate = await this.model.findOne(this.getQuery());
 
-  // Check if the order is already in cancelled status
   if (!orderToUpdate) {
     return next(new AppError(`No order with id ${this.getFilter()._id}`, 422))
   }

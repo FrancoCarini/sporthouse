@@ -120,25 +120,24 @@ exports.filters = asyncHandler(async (req, res, next) => {
   const products = res.advancedResults.data
 
   const filters = {
-    'Category': [],
-    'Gender': [],
-    'Brand': [],
-    'Size': []
+    'Category': new Set(),
+    'Gender': new Set(),
+    'Brand': new Set(),
+    'Size': new Set()
   }
 
   products.forEach(product => {
-    filters.Category.push(product.category.name)
-    filters.Gender.push(product.gender)
-    filters.Brand.push(product.brand.name)
+    filters.Category.add(product.category.name)
+    filters.Gender.add(product.gender)
+    filters.Brand.add(product.brand.name)
     // Get sizes
-    filters.Size = [...filters.Size, ...product.variants.map(variant => variant.size)]
+    product.variants.map(variant => filters.Size.add(variant.size))
   })
 
-  // Remover Duplicados
-  filters.Category = [...new Set(filters.Category)]
-  filters.Gender = [...new Set(filters.Gender)]
-  filters.Brand = [...new Set(filters.Brand)]
-  filters.Size = [...new Set(filters.Size)]
+  filters.Category = [...filters.Category]
+  filters.Gender = [...filters.Gender]
+  filters.Brand = [...filters.Brand]
+  filters.Size = [...filters.Size]
 
   res
     .status(200)

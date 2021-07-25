@@ -16,6 +16,20 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/products
 // @access    Private
 exports.createProduct = asyncHandler(async (req, res, next) => {
+  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  })
+
+  res
+    .status(200)
+    .json({
+      status: 'success',
+      data: product
+    })
+})
+
+exports.editProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.create(req.body)
 
   res

@@ -19,7 +19,9 @@ router
   .post(protect, restrictTo('admin'), productController.createProduct)
 
 router
-  .route('/:id([0-9]{1}[0-9A-Za-z]+)').get((protect, restrictTo('admin'), productController.getProductById))
+  .route('/:id([0-9]{1}[0-9A-Za-z]+)')
+  .get((protect, restrictTo('admin'), productController.getProductById))
+  .put((protect, restrictTo('admin'), productController.editProduct))
 
 router
   .route('/slug/:slug').get(productController.getProductBySlug)

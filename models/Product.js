@@ -105,13 +105,8 @@ ProductSchema.pre('save', function(next) {
 })
 
 ProductSchema.pre('save', async function(next) {
-  if (this.isModified('categoryId')) {
-    this.category =  await this.model('Category').findById(this.categoryId)
-  }
-
-  if (this.isModified('brandId')) {
-    this.brand =  await this.model('Brand').findById(this.brandId)
-  }
+  this.category =  await this.model('Category').findById(this.categoryId)
+  this.brand =  await this.model('Brand').findById(this.brandId)
   next()
 })
 

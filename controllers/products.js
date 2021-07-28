@@ -16,20 +16,6 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/products
 // @access    Private
 exports.createProduct = asyncHandler(async (req, res, next) => {
-  const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  })
-
-  res
-    .status(200)
-    .json({
-      status: 'success',
-      data: product
-    })
-})
-
-exports.editProduct = asyncHandler(async (req, res, next) => {
   const product = await Product.create(req.body)
 
   res
@@ -37,6 +23,41 @@ exports.editProduct = asyncHandler(async (req, res, next) => {
     .json({
       status: 'success',
       data: product
+    })
+})
+
+exports.editProduct = asyncHandler(async (req, res, next) => {
+  const product = await Product.findById(req.params.id)
+
+  const {
+    name,
+    description,
+    priceCents,
+    sku,
+    gender,
+    season,
+    categoryId,
+    brandId,
+    variants
+  } = req.body
+
+  product.name = name
+  product.description = description
+  product.priceCents = priceCents
+  product.sku = sku
+  product.gender = gender
+  product.season = season
+  product.categoryId = categoryId
+  product.brandId = brandId
+  product.variants = variants
+  
+  const updatedProduct = await product.save()
+
+  res
+    .status(200)
+    .json({
+      status: 'success',
+      data: updatedProduct
     })
 })
 

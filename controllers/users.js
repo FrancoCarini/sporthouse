@@ -97,7 +97,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
 
   // Send it as an email
   try {
-    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`
+    const resetUrl = `${process.env.FRONTEND_URL}account/reset/${resetToken}`
     await new Email(user, resetUrl).sendResetPassword()
     
     res.status(200).json({
